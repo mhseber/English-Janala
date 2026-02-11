@@ -4,11 +4,23 @@ const loadLessons = () => {
     .then(json => displayLesson(json.data));
 };
 
+const removeActive = () =>{
+    const lessonButtons = document.querySelectorAll(".lesson-btn");
+    // console.log(lessonButtons);
+    lessonButtons.forEach((btn) => btn.classList.remove("active"));
+};
+
 const loadLevelWord = (id)=>{
     const url = `https://openapi.programming-hero.com/api/level/${id}`;
     fetch(url)
     .then(res => res.json())
-    .then((data) => displayLevelWord(data.data));
+    .then((data) => {
+        removeActive();
+        const clickBtn = document.getElementById(`lesson-btn-${id}`);
+        // console.log(clickBtn);
+        clickBtn.classList.add("active");
+        displayLevelWord(data.data);
+    });
 }
 
 const displayLevelWord = (words) => {
@@ -38,7 +50,7 @@ const displayLevelWord = (words) => {
     <p class="font-semibold">Meaning /Pronounciation</p>
     <div class="text-2xl font-medium font-bangla">"${word.meaning ? word.meaning : "অর্থ পাওয়া যায়নি "} / ${word.pronunciation ? word.pronunciation : "Pronunciation পাওয়া যায়নি"}"</div>
     <div class="flex items-center justify-between">
-      <button class="btn text-xl bg-[#1491ff10] hover:bg-[#1491ff80] "><i class="fa-solid fa-circle-info"></i></button>
+      <button onClick="my_modal_5.showModal()" class="btn text-xl bg-[#1491ff10] hover:bg-[#1491ff80] "><i class="fa-solid fa-circle-info"></i></button>
       <button class="btn text-xl bg-[#1491ff10] hover:bg-[#1491ff80]"><i class="fa-solid fa-volume-low"></i></button>
     </div>
   </div>
@@ -58,7 +70,7 @@ const displayLesson = (lessons)=>{
          // 3. create element
          const btnDiv = document.createElement("div");
          btnDiv.innerHTML = `
-         <button onclick="loadLevelWord(${lesson.level_no})" class="btn btn-outline btn-primary">Lesson- ${lesson.level_no}</button>
+         <button id="lesson-btn-${lesson.level_no}" onclick="loadLevelWord(${lesson.level_no})" class="btn btn-outline btn-primary lesson-btn">Lesson- ${lesson.level_no}</button>
          `;
     // 4. append into container
     levelContainer.append(btnDiv);
