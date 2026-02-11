@@ -23,6 +23,45 @@ const loadLevelWord = (id)=>{
     });
 }
 
+const loadWordDetail = async (id) => {
+    const url = `https://openapi.programming-hero.com/api/word/${id}`;
+    const res = await fetch(url);
+    const details = await res.json();
+    displayWordDetails(details.data);
+}
+const displayWordDetails = (word) => {
+console.log(word);
+const detailsBox = document.getElementById("modal-container");
+detailsBox.innerHTML = `
+ <div>
+        <h2 class="text-2xl font-bold">
+          ${word.word} ( <i class="fa-solid fa-microphone"></i>:${word.pronunciation})
+        </h2>
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold">
+          Meaning
+        </h2>
+        <p>${word.meaning}</p>
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold">
+         Example
+        </h2>
+        <p>${word.sentence}</p>
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold">
+         Synonym
+        </h2>
+        <span class="btn">syss</span>
+        <span class="btn">syss</span>
+        <span class="btn">syss</span>
+      </div>
+`;
+document.getElementById("word_modal").showModal();
+}
+
 const displayLevelWord = (words) => {
     const wordContainer = document.getElementById("word-container");
     wordContainer.innerHTML = "";
@@ -38,19 +77,16 @@ const displayLevelWord = (words) => {
     return;
     }
 
-
-
-
     words.forEach((word) => {
         console.log(word);
         const card = document.createElement("div");
         card.innerHTML = `
-          <div class="px-4 py-10 space-y-4 text-center bg-white shadow-md rounded-xl">
+        <div class="px-4 py-10 space-y-4text-center bg-white shadow-md rounded-xl">
     <h2 class="text-3xl font-bold text-gray-800">${word.word ? word.word : "শব্দ পাওয়া যায়নি"}</h2>
     <p class="font-semibold">Meaning /Pronounciation</p>
     <div class="text-2xl font-medium font-bangla">"${word.meaning ? word.meaning : "অর্থ পাওয়া যায়নি "} / ${word.pronunciation ? word.pronunciation : "Pronunciation পাওয়া যায়নি"}"</div>
     <div class="flex items-center justify-between">
-      <button onClick="my_modal_5.showModal()" class="btn text-xl bg-[#1491ff10] hover:bg-[#1491ff80] "><i class="fa-solid fa-circle-info"></i></button>
+      <button onClick="loadWordDetail(${word.id})" class="btn text-xl bg-[#1491ff10] hover:bg-[#1491ff80] "><i class="fa-solid fa-circle-info"></i></button>
       <button class="btn text-xl bg-[#1491ff10] hover:bg-[#1491ff80]"><i class="fa-solid fa-volume-low"></i></button>
     </div>
   </div>
